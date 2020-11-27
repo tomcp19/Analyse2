@@ -16,9 +16,10 @@ public class Lab5 {
          * tictactoc.getBoard().add("aaa"); System.out.println(Board.get(0).ToString());
          */
         if (!tictactoc.isEnded()) {
-            tictactoc.Play(1);
-            tictactoc.Play(1);
+
+            tictactoc.Play(10);
             tictactoc.Play(2);
+            tictactoc.Play(1);
             tictactoc.Play(3);
             tictactoc.Play(4);
             tictactoc.Play(5);
@@ -92,7 +93,7 @@ class TicTacToc {
                 }
             }
         } else {
-            System.out.println("The game is over. You can't play anymore until Initialize(); \n");
+            System.out.println("The game is over. You can't play anymore until you run Initialize() again; \n");
         }
 
     }
@@ -162,21 +163,22 @@ class TicTacToc {
     }
 
     boolean isValidEntry(int x) {
-        if (Board.get(x - 1) != '.') {
-            System.out.println("\n The cell is already taken");
+        if (x < 1 || x > 9) {
+            System.out.println("\n Wrong entry: The cell chosen isn't between 1 and 9 \n");
             return false;
-        } else if (x < 1 || x > 9) {
-            System.out.println("\n The cell chosen isn't between 1 and 9");
+        } else if (Board.get(x - 1) != '.') {
+            System.out.println("\n  Wrong entry: The cell is already taken");
             return false;
+        } else {
+            return true;
         }
-        return true;
     }
 
     private void switchPlayer() {
         player = player == 1 ? 2 : 1;
         token = token == 'X' ? 'O' : 'X';
         if (!winStatus) {
-            System.out.println("\n It's player's " + player + " turn!");
+            System.out.println("\n It's player's " + player + " turn! \n");
         }
     }
 
@@ -190,7 +192,7 @@ class TicTacToc {
 
     public void printBoardChoices() {
         System.out.println(
-                "\n El ultimo TicTacToc de la muerte! \n \n  Choose an entry between a and 9 \n \n 1 | 2 | 3 \n _________ \n 4 | 5 | 6 \n _________ \n 7 | 8 | 9");
+                "\n El ultimo TicTacToc de la muerte! \n \n  Choose an entry between 1 and 9 \n \n 1 | 2 | 3 \n _________ \n 4 | 5 | 6 \n _________ \n 7 | 8 | 9");
     }
 
 }
