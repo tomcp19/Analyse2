@@ -1,6 +1,7 @@
 
 //package com.example.tictactoc;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Lab5 {
 
@@ -8,31 +9,24 @@ public class Lab5 {
 
         TicTacToc tictactoc = new TicTacToc();
         tictactoc.Initialize();
-        tictactoc.printBoardStatus();
-        tictactoc.printBoardChoices();
+        // tictactoc.printBoardStatus();
+        // tictactoc.printBoardChoices();
 
         /*
          * tictactoc.getBoard().add("aaa"); System.out.println(Board.get(0).ToString());
-         * 
-         * /* while(!tictactoc.isEnded()){ tictactoc.play(0,1); //joue sur la case en
-         * position 0,1 sur le tableau de jeu du joueur courant et passe au suivant;
-         * tictactoc.play(0,1); //joue sur la case en position 0,1 sur le tableau de jeu
-         * du joueur courant et passe au suivant; tictactoc.play(0,1); //joue sur la
-         * case en position 0,1 sur le tableau de jeu du joueur courant et passe au
-         * suivant; tictactoc.play(0,1); //joue sur la case en position 0,1 sur le
-         * tableau de jeu du joueur courant et passe au suivant; tictactoc.play(0,1);
-         * //joue sur la case en position 0,1 sur le tableau de jeu du joueur courant et
-         * passe au suivant; tictactoc.play(0,1); //joue sur la case en position 0,1 sur
-         * le tableau de jeu du joueur courant et passe au suivant; tictactoc.play(0,1);
-         * //joue sur la case en position 0,1 sur le tableau de jeu du joueur courant et
-         * passe au suivant; tictactoc.play(0,1); //joue sur la case en position 0,1 sur
-         * le tableau de jeu du joueur courant et passe au suivant; tictactoc.play(0,1);
-         * //joue sur la case en position 0,1 sur le tableau de jeu du joueur courant et
-         * passe au suivant; tictactoc.play(0,1); //joue sur la case en position 0,1 sur
-         * le tableau de jeu du joueur courant et passe au suivant;
-         * 
-         * }
          */
+        if (!tictactoc.isEnded()) {
+            tictactoc.Play(1);
+            tictactoc.Play(1);
+            tictactoc.Play(2);
+            tictactoc.Play(3);
+            tictactoc.Play(4);
+            tictactoc.Play(5);
+            tictactoc.Play(7);
+            tictactoc.Play(6);
+            tictactoc.Play(9);
+            tictactoc.Play(8);
+        }
 
     }
 }
@@ -46,15 +40,6 @@ class TicTacToc {
     int player;
     int turnCounter;
 
-    /*
-     * public void TicTacToc(){
-     * 
-     * for(int i = 0; i < 9; i++) { Board.set(i, "."); }
-     * 
-     * 
-     * }
-     */
-
     public void Initialize() {
         winStatus = false;
         even = false;
@@ -67,6 +52,9 @@ class TicTacToc {
             Board.add('.');
         }
 
+        printBoardChoices();
+        System.out.println("\n It's player's " + player + " turn!");
+
     }
 
     public ArrayList getBoard() {
@@ -74,22 +62,37 @@ class TicTacToc {
     }
 
     public boolean isEnded() {
-        return win;
+        return winStatus;
     }
 
-    void Play(int position) {
+    public void Play(int position) {
         if (!winStatus) {
-            int cell = position - 1;
-            while (!isValidEntry(cell)) {
-                println("Invalid entry, enter a new one");
-            }
-            Board.set(cell, token);
-            checkCondition();
-            if (winStatus) {
-                println("Player " + player + " has won. Congratulation!");
+            if (!isValidEntry(position)) {
+                System.out.println("\n Invalid entry, enter a new one");
+                // throws InterruptedException(){};
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             } else {
-                switchPlayer();
+                Board.set(position - 1, token);
+                turnCounter++;
+                checkCondition();
+                if (winStatus || even) {
+                    printBoardStatus();
+                    if (winStatus) {
+                        System.out.println("Player " + player + " has won. Congratulation! \n");
+                    } else {
+                        System.out.println("The game is even. There's no winner \n");
+                    }
+                } else {
+                    printBoardStatus();
+                    switchPlayer();
+                }
             }
+        } else {
+            System.out.println("The game is over. You can't play anymore until Initialize(); \n");
         }
 
     }
@@ -97,11 +100,6 @@ class TicTacToc {
     void checkCondition() {
         int condition;
 
-        /*
-         * if ((Board.get(0)).equals(Board.get(1)) &&
-         * Board.get(1).equals(Board.get(2))){ System.out.println("Player-" +
-         * Board.get(0) +" has won!"); return true;
-         */
         // check for lines
         for (condition = 0; condition < 9; condition++) {
             switch (condition) {
@@ -146,7 +144,6 @@ class TicTacToc {
                 condition = 8;
             }
         }
-        // return winStatus;
     }
 
     // https://stackoverflow.com/questions/4035244/java-arraylist-comparison-tictactoe
@@ -157,39 +154,38 @@ class TicTacToc {
             return false;
     }
 
-    boolean isEven() {
-        if (turnCounter == 9 && win == false) {
-            return true;
+    void isEven() {
+        if (turnCounter == 9 && winStatus == false) {
+            even = true;
         } else
-            return false;
+            even = false;
     }
 
     boolean isValidEntry(int x) {
-        if (!Board.get(x).equals('.')) {
-            println("The cell is already taken");
+        if (Board.get(x - 1) != '.') {
+            System.out.println("\n The cell is already taken");
             return false;
         } else if (x < 1 || x > 9) {
-            println("The cell chosen isn't between 1 and 9");
+            System.out.println("\n The cell chosen isn't between 1 and 9");
             return false;
         }
-        /*
-         * else if(x.hasNextInt())) { println("The entry must be a number"); return
-         * false; }
-         */
-
         return true;
     }
 
     private void switchPlayer() {
-        player = player == 1 ? 2 : 1; // si player est 1 retourne 2 sinon retourne 1
+        player = player == 1 ? 2 : 1;
         token = token == 'X' ? 'O' : 'X';
+        if (!winStatus) {
+            System.out.println("\n It's player's " + player + " turn!");
+        }
     }
 
     public void printBoardStatus() {
-        System.out.println("\n Board Status \n \n It's player's " + player + " turn! \n \n  " + Board.get(0) + " | "
-                + Board.get(1) + " | " + Board.get(2) + "\n ___________ \n  " + Board.get(3) + " | " + Board.get(4)
-                + " | " + Board.get(5) + "\n ___________\n  " + Board.get(6) + " | " + Board.get(7) + " | "
-                + Board.get(8) + "\n \n Please place your token in available spaces (type a number from 1 to 9)");
+
+        System.out.println("\n Board Status \n \n  " + Board.get(0) + " | " + Board.get(1) + " | " + Board.get(2)
+                + "\n ___________ \n  " + Board.get(3) + " | " + Board.get(4) + " | " + Board.get(5)
+                + "\n ___________\n  " + Board.get(6) + " | " + Board.get(7) + " | " + Board.get(8) + "\n\n");
+
     }
 
     public void printBoardChoices() {
