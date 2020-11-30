@@ -30,8 +30,40 @@ class TicTacToc {
     }
 
     public boolean isEnded() {
+
+        return winStatus || even;
+    }
+
+    public boolean getWinStatus()
+    {
         return winStatus;
     }
+
+    public boolean getEven()
+    {
+        return even;
+    }
+
+    public int getPlayer()
+    {
+        return player;
+    }
+
+    public ArrayList getBoard()
+    {
+        return Board;
+    }
+
+    public char getToken()
+    {
+        return token;
+    }
+
+    public int getTurn()
+    {
+        return turnCounter;
+    }
+
 
     public void Play(int position) {
         if (!winStatus) {
